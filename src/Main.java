@@ -4,9 +4,13 @@ import java.util.Scanner;
 
 public class Main {
 	
-	static List<Article> articles = new ArrayList<>();
-
-	static int lastArticleId = 1;
+	static List<Article> articles;
+	static int lastArticleId;
+	
+	static {
+		articles = new ArrayList<>();
+		lastArticleId = 1;
+	}
 	
 	public static void main(String[] args) {
 
