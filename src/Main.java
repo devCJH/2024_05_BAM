@@ -1,5 +1,3 @@
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -34,7 +32,7 @@ public class Main {
 				System.out.printf("내용 : ");
 				String body = sc.nextLine().trim();
 
-				Article article = new Article(lastArticleId, Util.getDateStr(), title, body);
+				Article article = new Article(lastArticleId, Util.getDateStr(), title, body, 0);
 				articles.add(article);
 
 				System.out.println(lastArticleId + "번 글이 생성되었습니다");
@@ -46,11 +44,11 @@ public class Main {
 					continue;
 				}
 
-				System.out.println("번호	|	제목	|	날짜");
+				System.out.println("번호	|	제목	|		날짜		|	조회수");
 
 				for (int i = articles.size() - 1; i >= 0; i--) {
 					Article article = articles.get(i);
-					System.out.printf("%d	|	%s	|	%s\n", article.id, article.title, article.regDate);
+					System.out.printf("%d	|	%s	|	%s	|	%d\n", article.id, article.title, article.regDate, article.viewCnt);
 				}
 				
 			} else if (cmd.startsWith("article detail ")) {
@@ -79,10 +77,13 @@ public class Main {
 					continue;
 				}
 				
+				foundArticle.increaseViewCnt();
+				
 				System.out.println("번호 : " + foundArticle.id);
 				System.out.println("날짜 : " + foundArticle.regDate);
 				System.out.println("제목 : " + foundArticle.title);
 				System.out.println("내용 : " + foundArticle.body);
+				System.out.println("조회수 : " + foundArticle.viewCnt);
 				
 			} else if (cmd.startsWith("article modify ")) {
 				String[] cmdBits = cmd.split(" ");
@@ -167,11 +168,17 @@ class Article {
 	String regDate;
 	String title;
 	String body;
+	int viewCnt;
 
-	Article(int id, String regDate, String title, String body) {
+	Article(int id, String regDate, String title, String body, int viewCnt) {
 		this.id = id;
 		this.regDate = regDate;
 		this.title = title;
 		this.body = body;
+		this.viewCnt = viewCnt;
+	}
+	
+	void increaseViewCnt() {
+		this.viewCnt++;
 	}
 }
