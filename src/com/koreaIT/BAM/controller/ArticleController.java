@@ -179,6 +179,8 @@ public class ArticleController extends Controller {
 			return id;
 		} catch (NumberFormatException e) {
 			return 0;
+		} catch (ArrayIndexOutOfBoundsException e) {
+			return 0;
 		}
 	}
 	
