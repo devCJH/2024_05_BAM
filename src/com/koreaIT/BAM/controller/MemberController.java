@@ -10,11 +10,13 @@ import com.koreaIT.BAM.util.Util;
 public class MemberController extends Controller {
 	
 	private List<Member> members;
+	public Member loginedMember;
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
 		this.members = new ArrayList<>();
 		this.lastId = 1;
+		this.loginedMember = null;
 	}
 	
 	@Override
@@ -23,6 +25,9 @@ public class MemberController extends Controller {
 		switch(methodName) {
 		case "join":
 			doJoin();
+			break;
+		case "login":
+			doLogin();
 			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다");
@@ -90,11 +95,44 @@ public class MemberController extends Controller {
 		lastId++;
 	}
 	
-	private boolean loginIdDupChk(String loginId) {
+	public void doLogin() {
+		System.out.printf("아이디 : ");
+		String loginId = sc.nextLine().trim();
+		System.out.printf("비밀번호 : ");
+		String loginPw = sc.nextLine().trim();
+		
+		Member foundMember = getMemberByLoginId(loginId);
+		
+		if (foundMember == null) {
+			System.out.println("존재하지 않는 아이디 입니다");
+			return;
+		}
+		
+		if (foundMember.getLoginPw().equals(loginPw) == false) {
+			System.out.println("비밀번호를 확인해주세요");
+			return;
+		}
+		
+		this.loginedMember = foundMember;
+		
+		System.out.println("로그인 성공!");
+		
+	}
+	
+	private Member getMemberByLoginId(String loginId) {
 		for (Member member : members) {
 			if (member.getLoginId().equals(loginId)) {
-				return false;
+				return member;
 			}
+		}
+		return null;
+	}
+	
+	private boolean loginIdDupChk(String loginId) {
+		Member member = getMemberByLoginId(loginId);
+		
+		if (member != null) {
+			return false;
 		}
 		return true;
 	}
