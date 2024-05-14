@@ -10,13 +10,12 @@ import com.koreaIT.BAM.util.Util;
 public class MemberController extends Controller {
 	
 	private List<Member> members;
-	public Member loginedMember;
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
 		this.members = new ArrayList<>();
 		this.lastId = 1;
-		this.loginedMember = null;
+		loginedMember = null;
 	}
 	
 	@Override
@@ -126,7 +125,7 @@ public class MemberController extends Controller {
 			return;
 		}
 		
-		this.loginedMember = foundMember;
+		loginedMember = foundMember;
 		
 		System.out.println("로그인 성공!");
 		
@@ -139,12 +138,8 @@ public class MemberController extends Controller {
 			return;
 		}
 		
-		this.loginedMember = null;
+		loginedMember = null;
 		System.out.println("로그아웃!");
-	}
-	
-	private boolean isLogined() {
-		return this.loginedMember != null;
 	}
 	
 	private Member getMemberByLoginId(String loginId) {
