@@ -1,9 +1,9 @@
 package com.koreaIT.BAM.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dto.Member;
 import com.koreaIT.BAM.util.Util;
 
@@ -13,7 +13,7 @@ public class MemberController extends Controller {
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		this.members = new ArrayList<>();
+		this.members = Container.members;
 		this.lastId = 1;
 		loginedMember = null;
 	}

@@ -4,16 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dto.Article;
+import com.koreaIT.BAM.dto.Member;
 import com.koreaIT.BAM.util.Util;
 
 public class ArticleController extends Controller {
 	
 	private List<Article> articles;
+	private List<Member> members;
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		this.articles = new ArrayList<>();
+		this.articles = Container.articles;
+		this.members = Container.members;
 		this.lastId = 1;
 	}
 
@@ -91,8 +95,11 @@ public class ArticleController extends Controller {
 
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
-			System.out.printf("%d	|	%s	|	%s	|	%d	|	%d\n", article.getId(), article.getTitle(),
-					article.getRegDate(), article.getMemberId(), article.getViewCnt());
+			
+			String writerLoingId = getLoginIdByMemberId(article.getMemberId());
+			
+			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(),
+					article.getRegDate(), writerLoingId, article.getViewCnt());
 		}
 	}
 
@@ -113,8 +120,11 @@ public class ArticleController extends Controller {
 
 		foundArticle.increaseViewCnt();
 
+		String writerLoingId = getLoginIdByMemberId(foundArticle.getMemberId());
+		
 		System.out.println("번호 : " + foundArticle.getId());
 		System.out.println("날짜 : " + foundArticle.getRegDate());
+		System.out.println("작성자 : " + writerLoingId);
 		System.out.println("제목 : " + foundArticle.getTitle());
 		System.out.println("내용 : " + foundArticle.getBody());
 		System.out.println("조회수 : " + foundArticle.getViewCnt());
@@ -174,6 +184,15 @@ public class ArticleController extends Controller {
 		articles.remove(foundArticle);
 
 		System.out.println(id + "번 게시물이 삭제되었습니다");
+	}
+	
+	private String getLoginIdByMemberId(int memberId) {
+		for (Member member : members) {
+			if (memberId == member.getId()) {
+				return member.getLoginId();
+			}
+		}
+		return null;
 	}
 	
 	private Article getArticleById(int id) {
