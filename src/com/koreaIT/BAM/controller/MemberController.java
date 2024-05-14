@@ -37,11 +37,6 @@ public class MemberController extends Controller {
 	}
 	
 	public void doJoin() {
-		if (isLogined()) {
-			System.out.println("로그인 상태입니다");
-			return;
-		}
-		
 		String loginId = null;
 		String loginPw = null;
 		String loginPwChk = null;
@@ -103,11 +98,6 @@ public class MemberController extends Controller {
 	}
 	
 	public void doLogin() {
-		if (isLogined()) {
-			System.out.println("로그인 상태입니다");
-			return;
-		}
-		
 		System.out.printf("아이디 : ");
 		String loginId = sc.nextLine().trim();
 		System.out.printf("비밀번호 : ");
@@ -132,12 +122,6 @@ public class MemberController extends Controller {
 	}
 	
 	public void doLogout() {
-		
-		if (isLogined() == false) {
-			System.out.println("로그아웃 상태입니다");
-			return;
-		}
-		
 		loginedMember = null;
 		System.out.println("로그아웃!");
 	}

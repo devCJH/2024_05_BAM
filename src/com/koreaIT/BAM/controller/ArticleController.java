@@ -47,11 +47,6 @@ public class ArticleController extends Controller {
 	}
 	
 	private void doWrite() {
-		if (isLogined() == false) {
-			System.out.println("로그인 하고 와");
-			return;
-		}
-		
 		System.out.printf("제목 : ");
 		String title = sc.nextLine().trim();
 		System.out.printf("내용 : ");
@@ -131,11 +126,6 @@ public class ArticleController extends Controller {
 	}
 	
 	public void doModify() {
-		if (isLogined() == false) {
-			System.out.println("로그인 하고 와");
-			return;
-		}
-		
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
@@ -167,11 +157,6 @@ public class ArticleController extends Controller {
 	}
 
 	public void doDelete() {
-		if (isLogined() == false) {
-			System.out.println("로그인 하고 와");
-			return;
-		}
-		
 		int id = getCmdNum(cmd);
 
 		if (id == 0) {
