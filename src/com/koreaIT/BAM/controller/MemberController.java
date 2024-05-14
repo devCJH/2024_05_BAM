@@ -29,12 +29,20 @@ public class MemberController extends Controller {
 		case "login":
 			doLogin();
 			break;
+		case "logout":
+			doLogout();
+			break;
 		default:
 			System.out.println("존재하지 않는 명령어 입니다");
 		}
 	}
 	
 	public void doJoin() {
+		if (isLogined()) {
+			System.out.println("로그인 상태입니다");
+			return;
+		}
+		
 		String loginId = null;
 		String loginPw = null;
 		String loginPwChk = null;
@@ -96,6 +104,11 @@ public class MemberController extends Controller {
 	}
 	
 	public void doLogin() {
+		if (isLogined()) {
+			System.out.println("로그인 상태입니다");
+			return;
+		}
+		
 		System.out.printf("아이디 : ");
 		String loginId = sc.nextLine().trim();
 		System.out.printf("비밀번호 : ");
@@ -117,6 +130,21 @@ public class MemberController extends Controller {
 		
 		System.out.println("로그인 성공!");
 		
+	}
+	
+	public void doLogout() {
+		
+		if (isLogined() == false) {
+			System.out.println("로그아웃 상태입니다");
+			return;
+		}
+		
+		this.loginedMember = null;
+		System.out.println("로그아웃!");
+	}
+	
+	private boolean isLogined() {
+		return this.loginedMember != null;
 	}
 	
 	private Member getMemberByLoginId(String loginId) {
