@@ -202,9 +202,9 @@ public class ArticleController extends Controller {
 	@Override
 	public void makeTestData() {
 		System.out.println("테스트용 게시글 데이터를 5개 생성했습니다");
-
+		
 		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(lastId++, Util.getDateStr(), 2, "제목" + i, "내용" + i, i * 10));
+			articles.add(new Article(lastId++, Util.getDateStr(), (int) (Math.random() * 3) + 1, "제목" + i, "내용" + i, i * 10));
 		}
 	}
 }
