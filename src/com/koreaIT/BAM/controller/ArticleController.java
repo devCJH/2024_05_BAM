@@ -1,25 +1,21 @@
 package com.koreaIT.BAM.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dto.Article;
-import com.koreaIT.BAM.dto.Member;
 import com.koreaIT.BAM.service.ArticleService;
+import com.koreaIT.BAM.service.MemberService;
 
 public class ArticleController extends Controller {
 	
-	private List<Article> articles;
-	private List<Member> members;
 	private ArticleService articleService;
+	private MemberService memberService;
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		this.articles = Container.articles;
-		this.members = Container.members;
 		this.articleService = new ArticleService();
+		this.memberService = new MemberService();
 	}
 
 	@Override
@@ -59,30 +55,13 @@ public class ArticleController extends Controller {
 	}
 	
 	public void showList() {
-		if (articles.size() == 0) {
-			System.out.println("존재하는 게시글이 없습니다");
-			return;
-		}
-
 		String searchKeyword = cmd.substring("article list".length()).trim();
 		
-		List<Article> printArticles = articles;
-		
-		if (searchKeyword.length() > 0) {
-			System.out.println("검색어 : " + searchKeyword);
-			
-			printArticles = new ArrayList<>();
-			
-			for (Article article : articles) {
-				if (article.getTitle().contains(searchKeyword)) {
-					printArticles.add(article);
-				}
-			}
-			
-			if (printArticles.size() == 0) {
-				System.out.println("검색결과가 없습니다");
-				return;
-			}
+		List<Article> printArticles = articleService.getPrintArticles(searchKeyword);
+
+		if (printArticles.size() == 0) {
+			System.out.println("게시물이 없습니다");
+			return;
 		}
 		
 		System.out.println("번호	|	제목	|		날짜		|	작성자	|	조회수");
@@ -90,7 +69,7 @@ public class ArticleController extends Controller {
 		for (int i = printArticles.size() - 1; i >= 0; i--) {
 			Article article = printArticles.get(i);
 			
-			String writerLoingId = getLoginIdByMemberId(article.getMemberId());
+			String writerLoingId = memberService.getLoginIdByMemberId(article.getMemberId());
 			
 			System.out.printf("%d	|	%s	|	%s	|	%s	|	%d\n", article.getId(), article.getTitle(),
 					article.getRegDate(), writerLoingId, article.getViewCnt());
@@ -105,16 +84,16 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
 			return;
 		}
 
-		foundArticle.increaseViewCnt();
+		articleService.increaseViewCnt(foundArticle);
 
-		String writerLoingId = getLoginIdByMemberId(foundArticle.getMemberId());
+		String writerLoingId = memberService.getLoginIdByMemberId(foundArticle.getMemberId());
 		
 		System.out.println("번호 : " + foundArticle.getId());
 		System.out.println("날짜 : " + foundArticle.getRegDate());
@@ -132,7 +111,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
@@ -149,9 +128,8 @@ public class ArticleController extends Controller {
 		System.out.printf("수정할 내용 : ");
 		String body = sc.nextLine().trim();
 
-		foundArticle.setTitle(title);
-		foundArticle.setBody(body);
-
+		articleService.modifyArticle(foundArticle, title, body);
+		
 		System.out.println(id + "번 게시물이 수정되었습니다");
 	}
 
@@ -163,7 +141,7 @@ public class ArticleController extends Controller {
 			return;
 		}
 
-		Article foundArticle = getArticleById(id);
+		Article foundArticle = articleService.getArticleById(id);
 
 		if (foundArticle == null) {
 			System.out.println(id + "번 게시물이 존재하지 않습니다");
@@ -175,28 +153,9 @@ public class ArticleController extends Controller {
 			return;
 		}
 		
-		articles.remove(foundArticle);
+		articleService.deleteArticle(foundArticle);
 
 		System.out.println(id + "번 게시물이 삭제되었습니다");
-	}
-	
-	private String getLoginIdByMemberId(int memberId) {
-		for (Member member : members) {
-			if (memberId == member.getId()) {
-				return member.getLoginId();
-			}
-		}
-		return null;
-	}
-	
-	private Article getArticleById(int id) {
-		for (Article article : articles) {
-			if (article.getId() == id) {
-				return article;
-			}
-		}
-
-		return null;
 	}
 	
 	private int getCmdNum(String cmd) {

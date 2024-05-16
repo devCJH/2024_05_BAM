@@ -1,22 +1,16 @@
 package com.koreaIT.BAM.controller;
 
-import java.util.List;
 import java.util.Scanner;
 
-import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dto.Member;
 import com.koreaIT.BAM.service.MemberService;
-import com.koreaIT.BAM.util.Util;
 
 public class MemberController extends Controller {
 	
-	private List<Member> members;
 	private MemberService memberService;
 	
 	public MemberController(Scanner sc) {
 		this.sc = sc;
-		this.members = Container.members;
-//		this.lastId = 1;
 		this.memberService = new MemberService();
 		loginedMember = null;
 	}
@@ -104,7 +98,7 @@ public class MemberController extends Controller {
 		System.out.printf("비밀번호 : ");
 		String loginPw = sc.nextLine().trim();
 		
-		Member foundMember = getMemberByLoginId(loginId);
+		Member foundMember = memberService.getMemberByLoginId(loginId);
 		
 		if (foundMember == null) {
 			System.out.println("존재하지 않는 아이디 입니다");
