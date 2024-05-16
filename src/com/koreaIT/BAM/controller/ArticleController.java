@@ -3,6 +3,7 @@ package com.koreaIT.BAM.controller;
 import java.util.List;
 import java.util.Scanner;
 
+import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dto.Article;
 import com.koreaIT.BAM.service.ArticleService;
 import com.koreaIT.BAM.service.MemberService;
@@ -14,8 +15,8 @@ public class ArticleController extends Controller {
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
-		this.articleService = new ArticleService();
-		this.memberService = new MemberService();
+		this.articleService = Container.articleService;
+		this.memberService = Container.memberService;
 	}
 
 	@Override
@@ -49,9 +50,11 @@ public class ArticleController extends Controller {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		int articleNumber = articleService.writeArticle(1, title, body, 0);
+		int id = articleService.getLastId();
 		
-		System.out.println(articleNumber + "번 글이 생성되었습니다");
+		articleService.writeArticle(loginedMember.getId(), title, body, 0);
+		
+		System.out.println(id + "번 글이 생성되었습니다");
 	}
 	
 	public void showList() {

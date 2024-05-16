@@ -2,6 +2,7 @@ package com.koreaIT.BAM.service;
 
 import java.util.List;
 
+import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dao.ArticleDao;
 import com.koreaIT.BAM.dto.Article;
 
@@ -10,11 +11,15 @@ public class ArticleService {
 	private ArticleDao articleDao;
 	
 	public ArticleService() {
-		this.articleDao = new ArticleDao();
+		this.articleDao = Container.articleDao;
 	}
 
-	public int writeArticle(int memberId, String title, String body, int viewCnt) {
-		return articleDao.writeArticle(memberId, title, body, viewCnt);
+	public int getLastId() {
+		return articleDao.getLastId();
+	}
+	
+	public void writeArticle(int memberId, String title, String body, int viewCnt) {
+		articleDao.writeArticle(memberId, title, body, viewCnt);
 	}
 	
 	public List<Article> getPrintArticles(String searchKeyword) {
