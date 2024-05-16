@@ -7,18 +7,19 @@ import java.util.Scanner;
 import com.koreaIT.BAM.container.Container;
 import com.koreaIT.BAM.dto.Article;
 import com.koreaIT.BAM.dto.Member;
-import com.koreaIT.BAM.util.Util;
+import com.koreaIT.BAM.service.ArticleService;
 
 public class ArticleController extends Controller {
 	
 	private List<Article> articles;
 	private List<Member> members;
+	private ArticleService articleService;
 	
 	public ArticleController(Scanner sc) {
 		this.sc = sc;
 		this.articles = Container.articles;
 		this.members = Container.members;
-		this.lastId = 1;
+		this.articleService = new ArticleService();
 	}
 
 	@Override
@@ -52,11 +53,9 @@ public class ArticleController extends Controller {
 		System.out.printf("내용 : ");
 		String body = sc.nextLine().trim();
 
-		Article article = new Article(lastId, Util.getDateStr(), loginedMember.getId(), title, body, 0);
-		articles.add(article);
-
-		System.out.println(lastId + "번 글이 생성되었습니다");
-		lastId++;
+		int articleNumber = articleService.writeArticle(1, title, body, 0);
+		
+		System.out.println(articleNumber + "번 글이 생성되었습니다");
 	}
 	
 	public void showList() {
@@ -218,7 +217,7 @@ public class ArticleController extends Controller {
 		System.out.println("테스트용 게시글 데이터를 5개 생성했습니다");
 		
 		for (int i = 1; i <= 5; i++) {
-			articles.add(new Article(lastId++, Util.getDateStr(), (int) (Math.random() * 3) + 1, "제목" + i, "내용" + i, i * 10));
+			articleService.writeArticle((int) (Math.random() * 3) + 1, "제목" + i, "내용" + i, i * 10);
 		}
 	}
 }
